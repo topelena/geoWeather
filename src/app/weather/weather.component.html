@@ -1,11 +1,11 @@
 
 
 
-<div class="container">  
+<div class="container"> 
     
 
   <div class="col">
-    <div class="weather-card.rain" [ngClass]="{'weather-card': !badWeather}">
+    <div class="weather-card" [ngClass]="{'weather-card rain': badWeather}">
       <div class="top">
         <div class="wrapper">
           <div class="mynav">
@@ -13,9 +13,9 @@
             <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
           </div>
           <h1 class="heading">{{userCity}}</h1>
-          <h3 class="location">Pressure {{userWeather.main.pressure}}</h3>
-          <h3 class="location">Humidity% {{userWeather.main.humidity}}</h3>
-          <h3 class="location"> Wind speed ngh {{userWeather.wind.speed}}</h3>         
+          <h3 class="location" *ngIf="userWeather">Pressure {{userWeather.main.pressure}}</h3>
+          <h3 class="location" *ngIf="userWeather">Humidity% {{userWeather.main.humidity}}</h3>
+          <h3 class="location" *ngIf="userWeather"> Wind speed ngh {{userWeather.wind.speed}}</h3>         
           <p class="temp">
             <span class="temp-value">{{tempinC}}</span>
             <span class="deg">0</span>
