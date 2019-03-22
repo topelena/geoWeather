@@ -3,7 +3,7 @@ import { WeatherService } from '../weather.service';
 
 
 @Component({
-  selector: '.app-weather',
+  selector: 'app-weather',
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.css']
 })
@@ -13,7 +13,7 @@ export class WeatherComponent implements OnInit {
   today = new Date();
   userWeather;
   tempinC;
-  badWeather: boolean = false;
+  badWeather;
   tempMin: string = '';
   tempMax: string = '';
 
@@ -26,8 +26,8 @@ export class WeatherComponent implements OnInit {
         position => {
           this.geolocationPosition = position;
           this.geolocationPosition.latitude = position.coords.latitude;
-          this.geolocationPosition.longitude = position.coords.longitude
-
+          this.geolocationPosition.longitude = position.coords.longitude;
+          this.getLocation();
         },
         error => {
           switch (error.code) {
@@ -44,36 +44,41 @@ export class WeatherComponent implements OnInit {
         }
       );
     };
-    this.getLocation();
+
+    //this.getLocation();
   }
 
   getLocation() {
     this.service.ipLookUp()
       .subscribe(location => {
         this.userCity = location.city;
+        console.log(this.userCity)
         const roundlat = (this.geolocationPosition.latitude).toFixed(0);
         const roundlog = (this.geolocationPosition.longitude).toFixed(0);
-        this.getWeatherByLocation(roundlat.toString(), roundlog.toString())
+        this.getWeatherByLocation(roundlat.toString(), roundlog.toString());
       })
 
   }
-  // getWeather(city: string) {
-  //   this.service.getWeather(city)
-  //     .subscribe(
-  //       info => this.userWeather = info)
-  // }
+
   getWeatherByLocation(lat, lon) {
     this.service.getWeatherByLocation(lat, lon)
       .subscribe(
         info => {
           this.userWeather = info;
+          console.log(info)
+          console.log(this.userWeather)
           this.tempinC = (this.userWeather.main.temp - 273).toFixed(0);
           this.tempMin = (this.userWeather.main.temp_min - 273).toFixed(0);
           this.tempMax = (this.userWeather.main.temp_max - 273).toFixed(0);
-          if (this.userWeather.clouds.all >= 0) {
-            this.badWeather = true
+
+          if (this.userWeather.clouds.all >= 10) {
+            console.log(22, this.userWeather.clouds.all);
+            this.badWeather = true;
+            console.log(1, this.badWeather)
+          } else {
+            this.badWeather = false;
           }
-          console.log(this.badWeather)
+          console.log(2, this.badWeather)
         })
   }
 }
